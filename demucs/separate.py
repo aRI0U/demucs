@@ -116,24 +116,21 @@ def main(opts=None):
 
     max_allowed_segment = float('inf')
     if isinstance(separator.model, HTDemucs):
-        max_allowed_segment = float(model.segment)
+        max_allowed_segment = float(separator.model.segment)
     elif isinstance(separator.model, BagOfModels):
-        max_allowed_segment = model.max_allowed_segment
+        max_allowed_segment = separator.model.max_allowed_segment
     if args.segment is not None and args.segment > max_allowed_segment:
         fatal("Cannot use a Transformer model with a longer segment "
               f"than it was trained for. Maximum segment is: {max_allowed_segment}")
 
     if isinstance(separator.model, BagOfModels):
-        print(f"Selected model is a bag of {len(model.models)} models. "
+        print(f"Selected model is a bag of {len(separator.model.models)} models. "
               "You will see that many progress bars per track.")
-
-    model.cpu()
-    model.eval()
 
     if args.stem is not None and args.stem not in separator.model.sources:
         fatal(
             'error: stem "{stem}" is not in selected model. STEM must be one of {sources}.'.format(
-                stem=args.stem, sources=', '.join(model.sources)))
+                stem=args.stem, sources=', '.join(separator.model.sources)))
     out = args.out / args.name
     out.mkdir(parents=True, exist_ok=True)
     print(f"Separated tracks will be stored in {out.resolve()}")
