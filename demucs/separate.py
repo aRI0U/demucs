@@ -10,6 +10,7 @@ from pathlib import Path
 
 import scipy.io.wavfile as wavfile
 import soxr
+import numpy as np
 
 from dora.log import fatal
 import torch as th
@@ -88,6 +89,7 @@ def get_parser():
                         help="Encoder preset of MP3, 2 for highest quality, 7 for "
                         "fastest speed. Default is 2")
     parser.add_argument("--sr", type=int, default=None)
+    parser.add_argument("--no-overwrite", action="store_true")
     parser.add_argument("-j", "--jobs",
                         default=0,
                         type=int,
